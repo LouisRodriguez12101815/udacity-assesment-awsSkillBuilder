@@ -3,194 +3,197 @@ layout: default
 title: "Udacity Assessment Knowledge Base"
 ---
 
-This page is a **concept-first study guide** (with deeper explanations) based on the questions we worked through.
+This site is a **concept-first study guide** for common topics that show up in the Udacity AWS AI Programmer assessment.
+It’s written for **review + understanding**, not as a list of Q&A.
 
-## How to use this
-- If you’re reviewing quickly: read the **Review** bullets.
-- If something feels fuzzy: read the **Background** section right underneath.
+## Key concepts & definitions (fast lookup)
+### Machine learning
+- **Loss / cost function**: a number that measures how wrong the model is; training tries to *minimize* it.
+- **Gradient descent**: iteratively updates parameters to reduce loss by stepping in the negative gradient direction.
+- **Learning rate (`alpha`)**: step size for parameter updates.
+- **Momentum**: uses a running “velocity” of gradients to smooth updates and speed progress.
+- **Cross-entropy**: classification loss; large when the model assigns low probability to the true class.
+- **Activation function**: maps weighted sums to outputs; adds nonlinearity (or thresholding in a perceptron).
+
+### NLP & Transformers
+- **Tokenization**: splitting text into tokens (words/subwords/chars) that can be converted to IDs.
+- **Self-attention**: lets each token attend to other tokens to build context-aware representations.
+- **Positional encoding**: adds token order/position information (attention alone doesn’t encode order).
+- **Causal (masked) attention**: blocks attention to future tokens to prevent “cheating” during generation.
+- **Feedforward network (FFN)**: position-wise MLP applied to each token after attention.
+
+### Python
+- **Dictionary (`dict`)**: key → value mapping. Add/update via `d[key] = value`.
+- **Set (`set`)**: unordered collection of unique items; supports union/intersection.
+- **`sorted()` vs `.sort()`**: `sorted(x)` returns a new list; `list.sort()` mutates in place.
+- **`len()`**: returns the length of a sequence (string length = number of characters).
+
+### Matplotlib
+- **Scatter plot**: shows relationship between two numeric variables.
+- **Overplotting**: too many points overlap; mitigate with `alpha` (transparency) and jitter.
+- **Subplots**: multiple axes in one figure (`plt.subplot(...)`).
+- **Bar chart**: `plt.bar(...)`.
+- **Axis limits**: `plt.xlim(xmin, xmax)`.
 
 ---
 
-# A) ML Optimization + Neural Nets
-
-## 1) What is gradient descent for?
+# Machine learning (concepts)
+## Gradient descent (purpose & update rule)
 ### Review
-- **Minimize the cost/loss function** by iteratively updating model parameters.
+- Gradient descent is used to **minimize a loss function** by adjusting model parameters.
 
 ### Background
-Gradient descent updates parameters `theta` using the gradient of the loss `J(theta)`:
+Given parameters `theta` and loss `J(theta)`:
 - `theta <- theta - alpha * grad_theta J(theta)`
-`alpha` is the learning rate (step size). It’s an optimization method—**not** a method for choosing architecture (layers/activations).
+`alpha` is the learning rate (step size). Gradient descent is an optimization method; it does **not** choose architecture (layers, activations).
 
-## 2) How can gradient descent avoid getting stuck?
+## Learning rate schedules (including decay)
 ### Review
-Helpful techniques include:
-- **Stochastic gradients (SGD / mini-batches)**: noise can help escape shallow minima / saddle points.
-- **Momentum** (and related optimizers): helps move through small traps/flat regions.
-- **Random restarts**: different initializations, keep the best run.
-
-Learning rate decay:
-- Primarily helps **converge stably** once you’re near a good region.
-- It can help as part of an annealing strategy, but it’s not the most direct “escape local minima” answer.
+- A high learning rate can speed early learning but risk instability.
+- **Learning rate decay** helps **stabilize convergence** later in training.
 
 ### Background
-Deep nets often struggle more with **saddle points** and **plateaus** than “bad local minima.” Stochasticity and momentum help keep training moving.
+Many training setups start with a larger step size (or noisier updates) and reduce it over time (decay/annealing). This is mainly about *converging smoothly*, not the most direct “escape local minima” tool.
 
-## 3) What conditions are needed for gradient descent?
+## Escaping poor basins (local minima / saddle points)
 ### Review
-- The loss should be **differentiable** (so a gradient exists).
-- Many beginner quizzes also say **continuous** (note: differentiable ⇒ continuous).
-- “Minimized at discrete intervals” is **not** a requirement.
+Useful techniques include:
+- **SGD / mini-batches**: gradient noise can help escape shallow basins and saddle points.
+- **Momentum / Adam-like optimizers**: can push through small traps and speed across plateaus.
+- **Random restarts**: try multiple initializations, keep the best.
 
 ### Background
-Gradient descent needs a direction to move, which comes from the derivative/gradient. In practice, ML often uses functions that are differentiable **almost everywhere** (e.g., ReLU).
+In deep learning, “getting stuck” is often about **saddle points** and **flat regions** rather than classic bad local minima. Noise and momentum keep optimization moving.
 
-## 4) What does an activation function do in a perceptron?
+## Differentiability (what gradient methods require)
 ### Review
-- It decides the neuron output from the **weighted sum + bias**.
-- In a classic perceptron, this is often a **step/threshold** (fire vs not).
+- Classic gradient descent assumes the loss is **differentiable** (so a gradient exists).
+- Many quizzes also say **continuous** (note: differentiable ⇒ continuous).
+
+### Background
+In practice, ML often uses functions that are differentiable **almost everywhere** (e.g., ReLU), and training uses subgradients or practical approximations.
+
+## Activation functions (perceptron intuition)
+### Review
+- The activation function decides a neuron’s output from the **weighted sum + bias**.
+- A classic perceptron often uses a **threshold/step** (fire vs not).
 
 ### Background
 Perceptron:
-- `z = w^T x + b` (weighted sum + bias)
+- `z = w^T x + b`
 - output `y_hat = phi(z)`
-In deeper networks, activation functions introduce **nonlinearity**, enabling complex decision boundaries.
+In deeper networks, activations introduce **nonlinearity**, enabling complex decision boundaries.
 
-## 5) What does a high cross-entropy mean?
+## Cross-entropy (interpretation)
 ### Review
-- The model assigns **low probability to the true class**.
-- Often corresponds to predictions being **uncertain** or **confident-but-wrong**.
+- High cross-entropy means the model assigns **low probability to the true class**.
 
 ### Background
-For one-hot classification, per example:
+For one-hot classification:
 - `L = -log(p_true_class)`
-If the model gives the correct class a small probability, loss becomes large.
+If `p_true_class` is small, the loss becomes large. Dataset noise can be a *cause* of high loss, but the loss value itself measures prediction-vs-label mismatch.
 
 ---
 
-# B) NLP + Transformers
-
-## 6) What is tokenization for?
+# NLP & Transformers (concepts)
+## Tokenization
 ### Review
-- Splits text into **tokens** (smaller units) that models can process.
+- Tokenization splits text into **tokens** that models can process.
 
 ### Background
-Tokens can be words, characters, or **subwords** (common for modern LLMs). Tokenization is not compression, not speech-to-text, and not classification.
+Tokens can be words, characters, or subwords (common for modern LLMs). Tokenization is not compression, speech-to-text, or classification.
 
-## 7) Which part is NOT in a Transformer encoder?
+## Encoder vs decoder attention (masked vs unmasked)
 ### Review
-- **Masked** multi-head self-attention is **not** part of the encoder (it’s for the decoder).
+- **Encoder** self-attention is typically **unmasked** (can attend to all input tokens).
+- **Decoder** uses **masked (causal)** self-attention to avoid looking at future tokens.
 
 ### Background
-The encoder can attend to all input tokens because the whole input is available. The decoder needs masking to generate left-to-right.
+The encoder sees the entire input sequence. The decoder generates left-to-right, so it must not “peek” ahead.
 
-## 8) Why do we need positional encoding?
+## Positional encoding
 ### Review
-- To provide information about **token order / position**.
+- Positional encodings provide information about **token order / position**.
 
 ### Background
-Self-attention alone doesn’t inherently encode order. Positional encodings inject order so the model can distinguish sequences with the same words in different arrangements.
+Self-attention by itself doesn’t encode order; positional signals inject the missing sequence structure.
 
-## 9) How does masked attention prevent “cheating”?
+## Causal masking (“prevent cheating”)
 ### Review
-- It blocks attention to **future tokens** (often by setting their attention logits to a very negative value, effectively −∞, so softmax weight becomes 0).
+- Masked attention blocks future tokens by zeroing out their attention weights (often by setting logits to a very negative value, effectively −∞).
 
 ### Background
-This is a **causal mask** (upper triangular). It enforces autoregressive generation: token at position `t` can only look at positions `<= t`.
+This is a causal (upper-triangular) mask: a token at position `t` can only attend to positions `<= t`.
 
-## 10) What does the feedforward block do in a Transformer?
+## Feedforward block (FFN)
 ### Review
-- Applies a **position-wise MLP** (Linear → nonlinearity → Linear) to each token representation.
+- The Transformer FFN is a **position-wise MLP** (Linear → nonlinearity → Linear) applied to each token.
 
 ### Background
-The attention block mixes information across tokens. The feedforward block increases representational power **per token**, typically expanding then projecting back down (e.g., d_model → d_ff → d_model).
+Attention mixes information across tokens; the FFN increases representational power **per token**, often via an expand-and-project pattern (`d_model -> d_ff -> d_model`).
 
 ---
 
-# C) Python fundamentals
-
-## 11) How do you add a key-value pair to a dictionary?
+# Python (language fundamentals)
+## Dictionaries (`dict`)
 ### Review
-- Use assignment: `d[key] = value`
+- Add/update: `d[key] = value`.
 
 ### Background
 - `append()` is for lists.
 - `add()` is for sets.
 
-## 12) What stores unique items and supports union/intersection?
+## Sets (`set`)
 ### Review
-- `set`
+- Store **unique** items and support union/intersection.
 
 ### Background
-Sets enforce uniqueness and support `|` (union) and `&` (intersection).
+Sets are unordered and support:
+- union: `A | B`
+- intersection: `A & B`
 
-## 13) What stores unique items where order isn’t guaranteed?
+## Sorting (copy vs in-place)
 ### Review
-- `set`
+- `sorted(x)` returns a new list.
+- `list.sort()` mutates the list and returns `None`.
 
-### Background
-Sets are unordered collections of unique hashable items.
-
-## 14) How do you sort without modifying the original list?
+## String length
 ### Review
-- Use `sorted(my_list)` (returns a new list).
-
-### Background
-- `my_list.sort()` sorts in place and returns `None`.
-
-## 15) How do you get the number of characters in a string?
-### Review
-- `len(s)`
+- Use `len(s)`.
 
 ---
 
-# D) Visualization (Matplotlib)
-
-## 16) Overplotting in scatter plots: how to reduce overlap?
+# Matplotlib (tooling)
+## Scatter plots & overplotting
 ### Review
-- Use **transparency (`alpha`)** and **jitter**.
+- Scatter plots show the relationship between two numeric variables.
+- Reduce overlap with **transparency** (`alpha`) and **jitter**.
 
 ### Background
-Transparency helps show density when points overlap. Jitter adds small random noise to separate points that share the same coordinates. Other common techniques include hexbin/2D histograms (when very dense).
+`alpha` makes dense regions visible. Jitter separates points that share identical coordinates. For extreme density, hexbin/2D histograms are also common.
 
-## 17) What is `plt.subplot()` for?
+## Subplots (`plt.subplot`)
 ### Review
-- Creating/selecting **subplots (multiple axes)** inside a figure.
+- `plt.subplot(...)` creates/selects axes in a grid to show multiple plots in one figure.
 
 ### Background
-You use subplots to arrange multiple plots in a grid (e.g., 2 rows × 2 cols). Overlaying multiple plots on the same axes is usually just multiple plotting calls on the same axes.
+Overlaying multiple plots on the same axes is typically just multiple plot calls on the same axes; `subplot` is for *multiple axes*.
 
-## 18) Bar chart function?
+## Bar charts
 ### Review
-- `plt.bar(...)`
+- Use `plt.bar(...)`.
 
-## 19) Set x-axis limits?
+## Axis limits
 ### Review
-- `plt.xlim(xmin, xmax)`
-
-## 20) A key property of scatterplots?
-### Review
-- They visualize the relationship between **two numeric variables** (trend, correlation, clusters, outliers).
+- Use `plt.xlim(xmin, xmax)`.
 
 ---
 
-# Quick flash review (30 seconds)
-- GD purpose → minimize loss by adjusting parameters
-- Escape “stuck” → SGD noise, momentum, random restarts (LR decay mainly improves convergence)
-- GD condition → differentiable loss
-- Perceptron activation → decide output from weighted sum
-- High cross-entropy → low prob on true class
-- Tokenization → split into tokens
-- Encoder ≠ masked self-attention
-- Positional encoding → order/position info
-- Masked attention → blocks future tokens
-- Transformer FFN → position-wise MLP
-- Dict add → `d[k]=v`
-- Unique + set ops → set
-- Sorted copy → `sorted()`
-- String length → `len()`
-- Overplotting → alpha + jitter
-- subplot → multiple axes
-- bar chart → `bar()`
-- x-limits → `xlim()`
-- scatterplot → relationship between two numeric vars
+## Quick review (30 seconds)
+- Gradient descent minimizes loss by stepping along the negative gradient.
+- SGD noise + momentum + restarts help avoid stalls.
+- Cross-entropy is large when the true class probability is low.
+- Tokenization splits text into tokens; positional encoding injects order.
+- Decoder self-attention is masked; encoder self-attention is typically unmasked.
+- Python: `d[k]=v`, `set`, `sorted()` vs `.sort()`, `len()`.
+- Matplotlib: scatter shows relationships; reduce overlap via `alpha` + jitter; use `subplot` for multiple axes.
