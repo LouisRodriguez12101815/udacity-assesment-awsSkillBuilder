@@ -18,9 +18,9 @@ This page is a **concept-first study guide** (with deeper explanations) based on
 - **Minimize the cost/loss function** by iteratively updating model parameters.
 
 ### Background
-Gradient descent updates parameters \(\theta\) using the gradient of the loss \(J(\theta)\):
-- \(\theta \leftarrow \theta - \alpha \nabla_\theta J(\theta)\)
-\(\alpha\) is the learning rate (step size). It’s an optimization method—**not** a method for choosing architecture (layers/activations).
+Gradient descent updates parameters `theta` using the gradient of the loss `J(theta)`:
+- `theta <- theta - alpha * grad_theta J(theta)`
+`alpha` is the learning rate (step size). It’s an optimization method—**not** a method for choosing architecture (layers/activations).
 
 ## 2) How can gradient descent avoid getting stuck?
 ### Review
@@ -52,8 +52,8 @@ Gradient descent needs a direction to move, which comes from the derivative/grad
 
 ### Background
 Perceptron:
-- \(z = w^T x + b\)
-- output \(\hat{y} = \phi(z)\)
+- `z = w^T x + b` (weighted sum + bias)
+- output `y_hat = phi(z)`
 In deeper networks, activation functions introduce **nonlinearity**, enabling complex decision boundaries.
 
 ## 5) What does a high cross-entropy mean?
@@ -63,7 +63,7 @@ In deeper networks, activation functions introduce **nonlinearity**, enabling co
 
 ### Background
 For one-hot classification, per example:
-- \(L = -\log(p_{\text{true class}})\)
+- `L = -log(p_true_class)`
 If the model gives the correct class a small probability, loss becomes large.
 
 ---
@@ -96,7 +96,7 @@ Self-attention alone doesn’t inherently encode order. Positional encodings inj
 - It blocks attention to **future tokens** (often by setting their attention logits to a very negative value, effectively −∞, so softmax weight becomes 0).
 
 ### Background
-This is a **causal mask** (upper triangular). It enforces autoregressive generation: token \(t\) can only look at \(\le t\).
+This is a **causal mask** (upper triangular). It enforces autoregressive generation: token at position `t` can only look at positions `<= t`.
 
 ## 10) What does the feedforward block do in a Transformer?
 ### Review
