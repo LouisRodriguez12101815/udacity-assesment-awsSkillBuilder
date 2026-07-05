@@ -1,4 +1,12 @@
 title: "Udacity Assessment Knowledge Base"
-description: "Study notes for the Udacity AWS AI Programmer challenge: ML optimization, Transformers, Python, and Matplotlib."
+description: "Concept-first study notes for the Udacity AWS AI Programmer assessment: ML optimization, Transformers, Python, and Matplotlib."
+
+# These help Jekyll generate absolute URLs for social previews (Open Graph).
+url: "https://louisrodriguez12101815.github.io"
+baseurl: "/udacity-assesment-awsSkillBuilder"
+
 theme: jekyll-theme-cayman
 markdown: kramdown
+
+plugins:
+  - jekyll-seo-tag

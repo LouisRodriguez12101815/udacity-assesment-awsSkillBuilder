@@ -1,6 +1,8 @@
 ---
 layout: default
 title: "Udacity Assessment Knowledge Base"
+description: "A concept-first study guide for the Udacity AWS AI Programmer assessment—ML optimization, Transformers, Python, and Matplotlib."
+image: /assets/og.png
 ---
 
 This site is a **concept-first study guide** for common topics that show up in the Udacity AWS AI Programmer assessment.

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="627" viewBox="0 0 1200 627">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1220"/>
+      <stop offset="55%" stop-color="#111c33"/>
+      <stop offset="100%" stop-color="#1a2a4d"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ff9900"/>
+      <stop offset="100%" stop-color="#ffd08a"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feColorMatrix in="blur" type="matrix"
+        values="1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                0 0 0 0.55 0"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <style>
+      .title { font: 700 56px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; fill: #ffffff; }
+      .subtitle { font: 500 26px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; fill: #cbd5e1; }
+      .tag { font: 600 22px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; fill: #0b1220; }
+      .small { font: 500 20px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; fill: #9fb0cc; }
+      .mono { font: 600 18px ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; fill:#e2e8f0; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1200" height="627" fill="url(#bg)"/>
+
+  <!-- Soft accent blobs -->
+  <circle cx="1050" cy="90" r="120" fill="#ff9900" opacity="0.18" filter="url(#soft)"/>
+  <circle cx="1080" cy="140" r="170" fill="#60a5fa" opacity="0.16" filter="url(#soft)"/>
+  <circle cx="160" cy="560" r="210" fill="#22c55e" opacity="0.10" filter="url(#soft)"/>
+
+  <!-- Decorative network/circuit lines -->
+  <g opacity="0.55" stroke="#7dd3fc" stroke-width="2" fill="none">
+    <path d="M120 420 C 240 340, 330 380, 450 300"/>
+    <path d="M260 520 C 360 470, 440 520, 560 430"/>
+    <path d="M520 260 C 640 200, 760 230, 900 150"/>
+  </g>
+  <g fill="#e2e8f0" opacity="0.9">
+    <circle cx="120" cy="420" r="6"/>
+    <circle cx="450" cy="300" r="6"/>
+    <circle cx="260" cy="520" r="6"/>
+    <circle cx="560" cy="430" r="6"/>
+    <circle cx="520" cy="260" r="6"/>
+    <circle cx="900" cy="150" r="6"/>
+  </g>
+
+  <!-- Tag pill -->
+  <g transform="translate(72,70)">
+    <rect x="0" y="0" rx="18" ry="18" width="380" height="44" fill="url(#accent)"/>
+    <text x="18" y="30" class="tag">AWS AI &amp; ML Scholars • Study Notes</text>
+  </g>
+
+  <!-- Main text -->
+  <g transform="translate(72,165)">
+    <text class="title" x="0" y="0">Udacity Assessment</text>
+    <text class="title" x="0" y="68">Knowledge Base</text>
+    <text class="subtitle" x="0" y="124">Concept-first review of ML optimization, Transformers,</text>
+    <text class="subtitle" x="0" y="158">Python fundamentals, and Matplotlib.</text>
+
+    <text class="small" x="0" y="225">Built for co-applicants: clear definitions at the top,</text>
+    <text class="small" x="0" y="255">then deeper explanations and common pitfalls.</text>
+  </g>
+
+  <!-- URL ribbon -->
+  <g transform="translate(72,520)">
+    <rect x="0" y="0" rx="14" ry="14" width="920" height="54" fill="#0f172a" opacity="0.85" stroke="#334155"/>
+    <text class="mono" x="18" y="34">louisrodriguez12101815.github.io/udacity-assesment-awsSkillBuilder/</text>
+  </g>
+
+  <!-- Corner badge (no official logos; just "AWS" text accent) -->
+  <g transform="translate(1010,520)" opacity="0.95">
+    <rect x="0" y="0" rx="16" ry="16" width="118" height="54" fill="#0b1220" stroke="#475569"/>
+    <text x="22" y="35" class="mono" fill="#ff9900">AI / ML</text>
+  </g>
+</svg>
